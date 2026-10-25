@@ -41,7 +41,7 @@ Then open http://localhost:8080.
 | `app.js` | All app logic: storage, totals, rendering, events |
 | `foods.js` | Food exchange library (edit this to add foods) |
 | `ideas.js` | Per-meal serving swaps and one-tap meal ideas from the plan |
-| `styles.css` | Styling, including dark mode |
+| `styles.css` | Styling (always light) |
 | `sw.js` | Service worker for offline use |
 | `manifest.webmanifest` | Home-screen app name, icon and colors |
 | `scripts/make-icons.js` | Regenerates the PNG icons from code |

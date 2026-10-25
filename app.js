@@ -216,7 +216,10 @@ function renderToday() {
           <div class="chips">${chips}</div>
         </div>
         ${rows ? `<ul class="items">${rows}</ul>` : '<p class="empty">Nothing logged yet.</p>'}
-        <button class="add-btn" data-action="open-sheet" data-meal="${m.key}">+ Add food</button>
+        <div class="meal-actions">
+          <button class="add-btn" data-action="open-sheet" data-meal="${m.key}">+ Add food</button>
+          <button class="add-btn ideas-btn" data-action="open-sheet" data-meal="${m.key}" data-tab="ideas">Meal ideas</button>
+        </div>
       </section>`;
   }).join('');
 
@@ -361,8 +364,10 @@ function renderSettings() {
 
 const $sheet = document.getElementById('sheet');
 
-function openSheet(meal) {
-  state.sheet = { meal, tab: 'library', query: '', selected: null, qty: 1 };
+// Opens on the plan's meal ideas when nothing is logged for that meal yet.
+function openSheet(meal, tab) {
+  const hasItems = getDay(state.date).items.some((it) => it.meal === meal);
+  state.sheet = { meal, tab: tab || (hasItems ? 'library' : 'ideas'), query: '', selected: null, qty: 1 };
   renderSheet();
   $sheet.showModal();
   $sheet.querySelector('input[type=search]')?.focus();
@@ -377,12 +382,13 @@ function renderSheet() {
   const sh = state.sheet;
   if (!sh) return;
   const mealLabel = MEALS.find((m) => m.key === sh.meal).label;
-  const tabs = [['library', 'Foods'], ['label', 'From label'], ['servings', 'Servings']]
+  const tabs = [['ideas', 'Ideas'], ['library', 'Foods'], ['label', 'Label'], ['servings', 'Servings']]
     .map(([k, l]) => `<button class="seg ${sh.tab === k ? 'active' : ''}" data-action="sheet-tab" data-tab="${k}">${l}</button>`)
     .join('');
 
   let body = '';
-  if (sh.tab === 'library') body = sheetLibrary(sh);
+  if (sh.tab === 'ideas') body = sheetIdeas(sh);
+  else if (sh.tab === 'library') body = sheetLibrary(sh);
   else if (sh.tab === 'label') body = sheetLabel();
   else body = sheetServings();
 
@@ -393,6 +399,50 @@ function renderSheet() {
     </div>
     <div class="segs">${tabs}</div>
     <div class="sheet-body">${body}</div>`;
+}
+
+// Turns an idea's [foodId, qty] pairs into log items.
+function ideaItems(idea) {
+  return idea.items
+    .map(([id, qty]) => {
+      const f = allFoods().find((x) => x.id === id);
+      return f && { foodId: f.id, name: f.name, unit: f.unit, qty, ...scaleFood(f, qty) };
+    })
+    .filter(Boolean);
+}
+
+function sheetIdeas(sh) {
+  const plan = MEAL_IDEAS[sh.meal];
+  const target = mealTargets(getDay(state.date))[sh.meal];
+  const swaps = plan.swaps.map((s) => {
+    const g = GROUPS.find((x) => x.key === s.group);
+    return `<li><span class="swap-group g-text-${g.key}">${fmt(s.count)} ${g.label.toLowerCase()}</span><span class="item-sub">${esc(s.text)}</span></li>`;
+  }).join('');
+
+  const ideas = plan.ideas.map((idea, i) => {
+    const items = ideaItems(idea);
+    const t = sum(items);
+    const chips = GROUPS.filter((g) => t[g.key] || target[g.key])
+      .map((g) => `<span class="chip ${status(t[g.key], target[g.key])}">${fmt(t[g.key])}/${fmt(target[g.key])} ${g.short}</span>`)
+      .join('');
+    const lines = items.map((it) => `${esc(it.name)} ×${fmt(it.qty)}`).join(' · ');
+    return `
+      <li class="idea">
+        <div class="item-name">${esc(idea.name)}</div>
+        <div class="item-sub">${lines}</div>
+        <div class="idea-foot">
+          <div class="chips">${chips}</div>
+          <button class="small-primary" data-action="add-idea" data-index="${i}">Add</button>
+        </div>
+      </li>`;
+  }).join('');
+
+  return `
+    <h3 class="sheet-sub">Your plan for this meal</h3>
+    <ul class="swaps">${swaps}</ul>
+    <h3 class="sheet-sub">Meal ideas</h3>
+    <p class="hint">Tap Add to log the whole meal. You can remove or change single items afterwards.</p>
+    <ul class="ideas">${ideas}</ul>`;
 }
 
 function sheetLibrary(sh) {
@@ -487,12 +537,16 @@ function scaleFood(f, qty) {
 }
 
 function addItem(item) {
+  addItems([item], item.name);
+}
+
+function addItems(items, label) {
   const day = ensureDay(state.date);
-  day.items.push({ id: uid(), meal: state.sheet.meal, ...item });
+  for (const item of items) day.items.push({ id: uid(), meal: state.sheet.meal, ...item });
   save();
   closeSheet();
   render();
-  toast(`Added ${item.name}`);
+  toast(`Added ${label}`);
 }
 
 function readNums(form, names) {
@@ -531,7 +585,12 @@ document.addEventListener('click', (e) => {
       save(); render();
       break;
     }
-    case 'open-sheet': openSheet(el.dataset.meal); break;
+    case 'open-sheet': openSheet(el.dataset.meal, el.dataset.tab); break;
+    case 'add-idea': {
+      const idea = MEAL_IDEAS[state.sheet.meal].ideas[Number(el.dataset.index)];
+      addItems(ideaItems(idea), idea.name);
+      break;
+    }
     case 'close-sheet': closeSheet(); break;
     case 'sheet-tab': state.sheet.tab = el.dataset.tab; state.sheet.selected = null; renderSheet(); break;
     case 'select-food': state.sheet.selected = el.dataset.id; state.sheet.qty = 1; renderSheet(); break;

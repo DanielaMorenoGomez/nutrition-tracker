@@ -4,6 +4,7 @@ A small phone-friendly web app for logging food against an **exchange-based meal
 (servings of carbs, protein, fat and veggies per meal) instead of counting calories.
 
 - **Today**: progress for each food group, a checklist (training day, vitamin D3, creatine), water, and the four meals with their targets
+- **Meal ideas**: each meal shows the plan's serving swaps and ready-made meals you can log in one tap (`ideas.js`)
 - **Add food**: pick from the exchange library, type in a nutrition label (it converts grams to exchanges), or enter servings directly
 - **History**: the last 14 days compared to target, plus averages
 - **Settings**: edit servings per meal, the water and calorie goals, and back up or restore your data
@@ -39,6 +40,7 @@ Then open http://localhost:8080.
 | `index.html` | Page shell: header, tab bar, add-food sheet |
 | `app.js` | All app logic: storage, totals, rendering, events |
 | `foods.js` | Food exchange library (edit this to add foods) |
+| `ideas.js` | Per-meal serving swaps and one-tap meal ideas from the plan |
 | `styles.css` | Styling, including dark mode |
 | `sw.js` | Service worker for offline use |
 | `manifest.webmanifest` | Home-screen app name, icon and colors |

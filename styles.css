@@ -145,10 +145,27 @@ button:disabled { opacity: .35; cursor: default; }
 .item-sub { font-size: 13px; color: var(--muted); }
 .item .icon-btn { width: 30px; height: 30px; font-size: 18px; color: var(--muted); }
 
+.meal-actions { display: flex; gap: 8px; margin-top: 8px; }
 .add-btn {
-  width: 100%; margin-top: 8px;
+  flex: 1;
   border-style: dashed; color: var(--accent); font-weight: 600; background: transparent;
 }
+.ideas-btn { flex: 0 0 auto; border-style: solid; color: var(--muted); }
+
+/* meal ideas */
+.sheet-sub { font-size: 14px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 6px; }
+.sheet-sub:first-child { margin-top: 0; }
+.swaps, .ideas { list-style: none; margin: 0; padding: 0; }
+.swaps li { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.swaps li:last-child { border-bottom: 0; }
+.swap-group { font-weight: 700; font-size: 14px; }
+.g-text-carb { color: var(--carb); }
+.g-text-protein { color: var(--protein); }
+.g-text-fat { color: var(--fat); }
+.g-text-veg { color: var(--veg); }
+.idea { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+.idea-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 8px; }
+.small-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; padding: 6px 16px; flex: none; }
 
 /* tab bar */
 .tabbar {

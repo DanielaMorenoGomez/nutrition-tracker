@@ -1,7 +1,7 @@
 // Service worker: lets the app open offline once it has been visited.
 // Network first, so a new deploy shows up the next time you open the app with signal.
 // Bump CACHE when the list of files changes.
-const CACHE = 'nutrition-tracker-v3';
+const CACHE = 'nutrition-tracker-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -16,7 +16,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
@@ -31,7 +31,9 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   event.respondWith(
-    fetch(req)
+    // 'no-cache' revalidates with the server instead of reusing GitHub Pages'
+    // 10-minute HTTP cache, so a merged change shows up on the next open.
+    fetch(req, { cache: 'no-cache' })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy));

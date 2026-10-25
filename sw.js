@@ -1,13 +1,14 @@
 // Service worker: lets the app open offline once it has been visited.
 // Network first, so a new deploy shows up the next time you open the app with signal.
 // Bump CACHE when the list of files changes.
-const CACHE = 'nutrition-tracker-v1';
+const CACHE = 'nutrition-tracker-v2';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './foods.js',
+  './ideas.js',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',

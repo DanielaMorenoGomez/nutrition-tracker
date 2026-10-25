@@ -1,0 +1,85 @@
+// Food library based on the MV Nutrition quick food exchange guide.
+// Each entry is ONE unit (the `unit` field) and how many exchanges that unit counts as.
+// Groups: carb = starch/fruit, protein, fat, veg.
+// `kcal` is optional; when it's missing the app estimates calories from the exchanges.
+
+const FOOD_LIBRARY = [
+  // ---- Starches (carb) ----
+  { id: 'ezekiel', name: 'Ezekiel bread', unit: 'slice', cat: 'Starch', carb: 1, kcal: 80 },
+  { id: 'ww-bread', name: 'Whole wheat bread', unit: 'slice', cat: 'Starch', carb: 1, kcal: 80 },
+  { id: 'brown-rice', name: 'Brown rice (cooked)', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 110 },
+  { id: 'white-rice', name: 'White rice (cooked)', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 105 },
+  { id: 'quinoa', name: 'Quinoa (cooked)', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 110 },
+  { id: 'pasta', name: 'Pasta (cooked)', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 100 },
+  { id: 'sweet-potato', name: 'Sweet potato', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 90 },
+  { id: 'potato', name: 'Potato', unit: '1 small', cat: 'Starch', carb: 1 },
+  { id: 'oatmeal', name: 'Oatmeal (cooked)', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 80 },
+  { id: 'beans-starch', name: 'Beans / lentils (as carb)', unit: '½ cup', cat: 'Starch', carb: 1, kcal: 110 },
+  { id: 'ww-wrap', name: 'Whole wheat / low carb wrap', unit: '1 wrap', cat: 'Starch', carb: 1 },
+  { id: 'rice-cake', name: 'Rice cakes', unit: '2 cakes', cat: 'Starch', carb: 1, kcal: 70 },
+  { id: 'granola', name: 'Granola', unit: '¼ cup', cat: 'Starch', carb: 1, kcal: 120 },
+  { id: 'cereal', name: 'Breakfast cereal', unit: '¾ cup', cat: 'Starch', carb: 1 },
+  { id: 'plantain', name: 'Plantain', unit: '¼ plantain', cat: 'Starch', carb: 1 },
+  { id: 'yuca', name: 'Yuca', unit: '⅓ cup', cat: 'Starch', carb: 1 },
+  { id: 'arepa', name: 'Arepa (whole wheat)', unit: '1 arepa', cat: 'Starch', carb: 1 },
+  { id: 'popcorn', name: 'Popcorn (fat free)', unit: '3 cups', cat: 'Starch', carb: 1 },
+
+  // ---- Fruits (carb) ----
+  { id: 'banana', name: 'Banana', unit: '½ banana', cat: 'Fruit', carb: 1, kcal: 55 },
+  { id: 'apple', name: 'Apple', unit: '1 medium', cat: 'Fruit', carb: 1, kcal: 95 },
+  { id: 'berries', name: 'Berries', unit: '1 cup', cat: 'Fruit', carb: 1, kcal: 70 },
+  { id: 'orange', name: 'Orange', unit: '1 medium', cat: 'Fruit', carb: 1, kcal: 60 },
+  { id: 'pear', name: 'Pear', unit: '1 medium', cat: 'Fruit', carb: 1 },
+  { id: 'grapes', name: 'Grapes', unit: '16 small', cat: 'Fruit', carb: 1 },
+  { id: 'mango', name: 'Mango', unit: '½ mango', cat: 'Fruit', carb: 1 },
+  { id: 'pineapple', name: 'Pineapple', unit: '1 slice', cat: 'Fruit', carb: 1 },
+  { id: 'melon', name: 'Melon / papaya / watermelon', unit: '1 cup', cat: 'Fruit', carb: 1 },
+  { id: 'tangerine', name: 'Tangerines', unit: '2 small', cat: 'Fruit', carb: 1 },
+  { id: 'kiwi', name: 'Kiwi', unit: '1 kiwi', cat: 'Fruit', carb: 1 },
+  { id: 'dates', name: 'Date', unit: '1 date', cat: 'Fruit', carb: 1 },
+  { id: 'honey', name: 'Honey / jelly', unit: '1 tsp', cat: 'Fruit', carb: 1 },
+
+  // ---- Protein ----
+  { id: 'egg', name: 'Egg (whole)', unit: '1 egg', cat: 'Protein', protein: 1, kcal: 70 },
+  { id: 'egg-whites', name: 'Egg whites', unit: '2 whites', cat: 'Protein', protein: 1, kcal: 35 },
+  { id: 'chicken', name: 'Chicken / turkey (cooked)', unit: '1 oz', cat: 'Protein', protein: 1, kcal: 50 },
+  { id: 'ground-turkey', name: 'Ground turkey (cooked)', unit: '1 oz', cat: 'Protein', protein: 1, kcal: 55 },
+  { id: 'fish', name: 'Fish, white (cooked)', unit: '1 oz', cat: 'Protein', protein: 1, kcal: 35 },
+  { id: 'salmon', name: 'Salmon (cooked)', unit: '1 oz', cat: 'Protein', protein: 1, kcal: 60 },
+  { id: 'beef', name: 'Beef / pork (cooked)', unit: '1 oz', cat: 'Protein', protein: 1, kcal: 65 },
+  { id: 'shrimp', name: 'Shrimp / shellfish', unit: '¼ cup', cat: 'Protein', protein: 1, kcal: 35 },
+  { id: 'tuna-can', name: 'Tuna / salmon, canned in water', unit: '1 can (5 oz)', cat: 'Protein', protein: 4, kcal: 120 },
+  { id: 'tuna-pouch-lp', name: 'Tuna pouch, lemon pepper', unit: '1 pouch', cat: 'Protein', protein: 2.5, kcal: 80 },
+  { id: 'tofu', name: 'Tofu', unit: '1½ oz', cat: 'Protein', protein: 1, kcal: 40 },
+  { id: 'greek-yogurt', name: 'Greek yogurt / cottage cheese', unit: '2.5 oz', cat: 'Protein', protein: 1, kcal: 40 },
+  { id: 'whey', name: 'Whey protein powder', unit: '1 scoop', cat: 'Protein', protein: 3, kcal: 120 },
+  { id: 'vegan-protein', name: 'Vegan protein powder', unit: '1 scoop', cat: 'Protein', protein: 1.5, kcal: 110 },
+  { id: 'string-cheese', name: 'String cheese / light Babybel', unit: '1 piece', cat: 'Protein', protein: 1, kcal: 70 },
+  { id: 'deli-turkey', name: 'Deli turkey / chicken', unit: '1 oz', cat: 'Protein', protein: 1, kcal: 30 },
+  { id: 'david-bar', name: 'David protein bar', unit: '1 bar', cat: 'Protein', protein: 4, kcal: 150 },
+  { id: 'protein-shake', name: 'Protein shake (Premier / Fairlife / Core Power)', unit: '1 bottle', cat: 'Protein', protein: 4, kcal: 160 },
+  { id: 'chobani-protein', name: 'Chobani protein yogurt (20 g)', unit: '1 cup', cat: 'Protein', protein: 3, kcal: 140 },
+
+  // ---- Fat ----
+  { id: 'icbinb', name: "I Can't Believe It's Not Butter", unit: '1 tbsp', cat: 'Fat', fat: 1.5, kcal: 70 },
+  { id: 'butter', name: 'Butter', unit: '1 tsp', cat: 'Fat', fat: 1, kcal: 35 },
+  { id: 'olive-oil', name: 'Olive / avocado oil', unit: '1 tsp', cat: 'Fat', fat: 1, kcal: 40 },
+  { id: 'avocado', name: 'Avocado', unit: '¼ avocado', cat: 'Fat', fat: 1, kcal: 60 },
+  { id: 'nut-butter', name: 'Peanut / almond butter', unit: '1 tbsp', cat: 'Fat', fat: 2, kcal: 95 },
+  { id: 'almonds', name: 'Almonds', unit: '6 almonds', cat: 'Fat', fat: 1, kcal: 42 },
+  { id: 'walnuts', name: 'Walnuts / pecans', unit: '2 halves', cat: 'Fat', fat: 1 },
+  { id: 'cheese', name: 'Cheese (cheddar, parmesan…)', unit: '1 oz', cat: 'Fat', fat: 1, kcal: 110 },
+  { id: 'cream-cheese', name: 'Cream cheese', unit: '1 tbsp', cat: 'Fat', fat: 1, kcal: 50 },
+  { id: 'mayo', name: 'Mayonnaise', unit: '1 tsp', cat: 'Fat', fat: 1, kcal: 35 },
+  { id: 'dark-choc', name: 'Dark chocolate', unit: '1 square', cat: 'Fat', fat: 1, kcal: 55 },
+  { id: 'seeds', name: 'Chia / flax / hemp seeds', unit: '1 tbsp', cat: 'Fat', fat: 1, kcal: 55 },
+  { id: 'olives', name: 'Olives', unit: '8 olives', cat: 'Fat', fat: 1 },
+  { id: 'hummus', name: 'Hummus', unit: '2 tbsp', cat: 'Fat', fat: 1, kcal: 70 },
+
+  // ---- Vegetables ----
+  { id: 'veg-low', name: 'Non-starchy veggies (broccoli, greens…)', unit: '1 cup', cat: 'Veggies', veg: 1, kcal: 25 },
+  { id: 'salad', name: 'Salad greens', unit: '1 cup', cat: 'Veggies', veg: 1, kcal: 10 },
+  { id: 'peas', name: 'Peas / beets / squash / pumpkin', unit: '½ cup', cat: 'Veggies', veg: 1, kcal: 25 },
+  { id: 'tomato-sauce', name: 'Tomato sauce', unit: '4 tbsp', cat: 'Veggies', veg: 1, kcal: 20 },
+  { id: 'onion', name: 'Onion', unit: '½ cup', cat: 'Veggies', veg: 1 },
+];
